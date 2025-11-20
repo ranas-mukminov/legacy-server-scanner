@@ -1,0 +1,142 @@
+meta:
+  name: home-office-router
+  description: PPPoE WAN, main LAN, guest Wi-Fi, remote VPN
+  target:
+    vendor: routeros
+    version: v7
+
+wan:
+  type: pppoe
+  interface: ether1
+  username: "PPPOE_USER_PLACEHOLDER"
+  password_ref: "secret:pppoe_password"
+  mtu: 1492
+
+lans:
+  - name: main
+    subnet: 192.168.10.0/24
+    gateway: 192.168.10.1
+    dhcp:
+      enabled: true
+      range: 192.168.10.100-192.168.10.200
+      lease_time: 24h
+      dns:
+        - 8.8.8.8
+        - 8.8.4.4
+
+  - name: guest
+    subnet: 192.168.20.0/24
+    gateway: 192.168.20.1
+    vlan_id: 20
+    dhcp:
+      enabled: true
+      range: 192.168.20.50-192.168.20.150
+      lease_time: 12h
+    isolated_from:
+      - main
+
+wifi:
+  - name: main-wifi
+    lan: main
+    ssid: "MyHome"
+    mode: ap
+    band: "5GHz"
+    channel: 36
+    security:
+      encryption: wpa2-psk
+      password_ref: "secret:wifi_main_password"
+    hidden: false
+
+  - name: guest-wifi
+    lan: guest
+    ssid: "MyHome-Guest"
+    mode: ap
+    band: "2.4GHz"
+    channel: 6
+    security:
+      encryption: wpa2-psk
+      password_ref: "secret:wifi_guest_password"
+    guest: true
+    hidden: false
+
+vpn:
+  - type: wireguard
+    role: server
+    listen_port: 51820
+    allowed_ips:
+      - 10.10.10.0/24
+    private_key_ref: "secret:wireguard_private_key"
+
+firewall:
+  default_policy: drop
+  rules:
+    - name: allow_established
+      from: ["wan"]
+      to: ["main", "guest"]
+      action: accept
+      comment: "Allow established connections"
+
+    - name: allow_lan_to_internet
+      from: ["main"]
+      to: ["wan"]
+      action: accept
+      comment: "Allow main LAN to internet"
+
+    - name: allow_guest_to_internet
+      from: ["guest"]
+      to: ["wan"]
+      action: accept
+      comment: "Allow guest to internet only"
+
+    - name: block_guest_to_main
+      from: ["guest"]
+      to: ["main"]
+      action: drop
+      comment: "Block guest from accessing main LAN"
+
+    - name: allow_vpn_to_main
+      from: ["vpn"]
+      to: ["main"]
+      action: accept
+      comment: "Allow VPN access to main LAN"
+
+    - name: allow_ssh_from_main
+      from: ["main"]
+      to: ["192.168.10.1"]
+      protocol: tcp
+      port: "22"
+      action: accept
+      comment: "Allow SSH from main LAN to router"
+
+    - name: block_wan_to_router
+      from: ["wan"]
+      to: ["192.168.10.1"]
+      action: drop
+      comment: "Block all WAN to router"
+
+nat:
+  masquerade: true
+  port_forwards:
+    - name: web_server
+      protocol: tcp
+      external_port: 80
+      internal_ip: 192.168.10.100
+      internal_port: 80
+
+    - name: ssh_server
+      protocol: tcp
+      external_port: 2222
+      internal_ip: 192.168.10.100
+      internal_port: 22
+
+dns:
+  forwarders:
+    - 8.8.8.8
+    - 8.8.4.4
+    - 1.1.1.1
+  local_domain: "home.local"
+  static_records:
+    - name: "router.home.local"
+      ip: "192.168.10.1"
+    - name: "nas.home.local"
+      ip: "192.168.10.100"
