@@ -6,7 +6,7 @@ These models provide a vendor-agnostic representation of network policies.
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import List, Optional, Dict, Any
+from typing import List, Optional
 
 
 class VendorType(str, Enum):

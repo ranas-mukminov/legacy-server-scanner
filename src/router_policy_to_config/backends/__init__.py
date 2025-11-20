@@ -1,6 +1,6 @@
 """Backend package for generating vendor-specific configurations."""
 
-from .routeros_backend import RouterOSBackend
 from .openwrt_backend import OpenWrtBackend
+from .routeros_backend import RouterOSBackend
 
-__all__ = ['RouterOSBackend', 'OpenWrtBackend']
+__all__ = ['OpenWrtBackend', 'RouterOSBackend']

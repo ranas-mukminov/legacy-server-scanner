@@ -10,13 +10,13 @@ __author__ = "run-as-daemon"
 __email__ = "support@run-as-daemon.ru"
 __url__ = "https://run-as-daemon.ru"
 
-from .model import Policy, WAN, LAN, WiFi, VPN, Firewall
+from .model import LAN, VPN, WAN, Firewall, Policy, WiFi
 
 __all__ = [
-    "Policy",
-    "WAN",
     "LAN",
-    "WiFi",
     "VPN",
+    "WAN",
     "Firewall",
+    "Policy",
+    "WiFi",
 ]
