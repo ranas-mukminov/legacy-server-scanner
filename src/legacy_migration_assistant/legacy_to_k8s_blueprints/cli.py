@@ -9,9 +9,13 @@ from typing import Any, Dict, List
 
 import yaml
 
-from legacy_migration_assistant.core.models import AppTopology, AppComponent, ComponentType, Relation
+from legacy_migration_assistant.core.models import (
+    AppComponent,
+    AppTopology,
+    ComponentType,
+    Relation,
+)
 from legacy_migration_assistant.legacy_to_k8s_blueprints.compose_parser import (
-    parse_compose_dict,
     parse_compose_file,
     topology_to_blueprint,
 )

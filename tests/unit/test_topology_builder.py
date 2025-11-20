@@ -1,4 +1,11 @@
-from legacy_migration_assistant.core.models import Package, Service, Port, ConfigFile, CronJob, ComponentType
+from legacy_migration_assistant.core.models import (
+    ComponentType,
+    ConfigFile,
+    CronJob,
+    Package,
+    Port,
+    Service,
+)
 from legacy_migration_assistant.legacy_server_scanner.topology_builder import build_topology
 
 

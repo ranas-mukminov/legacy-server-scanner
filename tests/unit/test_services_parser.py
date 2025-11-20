@@ -1,4 +1,7 @@
-from legacy_migration_assistant.legacy_server_scanner.services import parse_systemctl_list_units, parse_ps_aux
+from legacy_migration_assistant.legacy_server_scanner.services import (
+    parse_ps_aux,
+    parse_systemctl_list_units,
+)
 
 SYSTEMCTL_SAMPLE = """
   UNIT                            LOAD   ACTIVE SUB     DESCRIPTION

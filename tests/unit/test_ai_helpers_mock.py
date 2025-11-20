@@ -1,6 +1,6 @@
-from legacy_migration_assistant.ai.base import NoopAIProvider, Message
+from legacy_migration_assistant.ai.base import Message, NoopAIProvider
 from legacy_migration_assistant.ai.compose_ai_helper import generate_compose_comments
-from legacy_migration_assistant.core.models import AppTopology, AppComponent, ComponentType
+from legacy_migration_assistant.core.models import AppComponent, AppTopology, ComponentType
 
 
 def test_noop_provider():

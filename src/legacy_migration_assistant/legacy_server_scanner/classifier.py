@@ -4,7 +4,14 @@ from __future__ import annotations
 
 from typing import List
 
-from legacy_migration_assistant.core.models import AppComponent, ComponentType, ConfigFile, Package, Port, Service
+from legacy_migration_assistant.core.models import (
+    AppComponent,
+    ComponentType,
+    ConfigFile,
+    Package,
+    Port,
+    Service,
+)
 
 
 def _has_name(names: List[str], needles: List[str]) -> bool:

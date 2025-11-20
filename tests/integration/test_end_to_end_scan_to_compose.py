@@ -1,6 +1,6 @@
-from legacy_migration_assistant.core.models import Package, Service, Port, ConfigFile, CronJob
-from legacy_migration_assistant.legacy_server_scanner.topology_builder import build_topology
+from legacy_migration_assistant.core.models import ConfigFile, CronJob, Package, Port, Service
 from legacy_migration_assistant.legacy_server_scanner.compose_generator import build_compose
+from legacy_migration_assistant.legacy_server_scanner.topology_builder import build_topology
 
 
 def test_scan_to_compose_pipeline():

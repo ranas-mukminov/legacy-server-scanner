@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import re
 from typing import List, Optional
 
 from legacy_migration_assistant.core.models import OSFamily, Package

@@ -5,7 +5,6 @@ from __future__ import annotations
 from legacy_migration_assistant.core.models import ComponentType
 from legacy_migration_assistant.legacy_to_k8s_blueprints.blueprint_models import ResourceAdvice
 
-
 DEFAULT = ResourceAdvice(
     cpu_request="100m",
     memory_request="128Mi",

@@ -1,4 +1,7 @@
-from legacy_migration_assistant.legacy_server_scanner.ports import parse_ss_output, parse_netstat_output
+from legacy_migration_assistant.legacy_server_scanner.ports import (
+    parse_netstat_output,
+    parse_ss_output,
+)
 
 SS_SAMPLE = """
 Netid State  Recv-Q Send-Q Local Address:Port Peer Address:Port Process
@@ -9,7 +12,7 @@ tcp   LISTEN 0      128    0.0.0.0:80      0.0.0.0:*    users:(""(nginx,4321,5))
 NETSTAT_SAMPLE = """
 Active Internet connections (only servers)
 Proto Recv-Q Send-Q Local Address           Foreign Address         State
-udp        0      0 0.0.0.0:68              0.0.0.0:*               
+udp        0      0 0.0.0.0:68              0.0.0.0:*
 tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN
 """
 

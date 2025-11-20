@@ -8,7 +8,6 @@ from typing import List
 from legacy_migration_assistant.core.models import Port
 from legacy_migration_assistant.core.utils import run_command
 
-
 _USERS_RE = re.compile(r"users:\\(\\((?P<info>[^)]*)\\)\\)")
 
 

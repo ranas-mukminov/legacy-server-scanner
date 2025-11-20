@@ -1,33 +1,33 @@
 """Core utilities and models."""
 
 from .models import (
+    AppComponent,
+    AppTopology,
+    ComponentType,
+    ConfigFile,
+    CronJob,
     OSFamily,
     OSRelease,
     Package,
-    Service,
     Port,
-    CronJob,
-    ConfigFile,
-    ComponentType,
-    AppComponent,
     Relation,
-    AppTopology,
+    Service,
 )
-from .utils import run_command, safe_read_file, detect_systemd
+from .utils import detect_systemd, run_command, safe_read_file
 
 __all__ = [
+    "AppComponent",
+    "AppTopology",
+    "ComponentType",
+    "ConfigFile",
+    "CronJob",
     "OSFamily",
     "OSRelease",
     "Package",
-    "Service",
     "Port",
-    "CronJob",
-    "ConfigFile",
-    "ComponentType",
-    "AppComponent",
     "Relation",
-    "AppTopology",
+    "Service",
+    "detect_systemd",
     "run_command",
     "safe_read_file",
-    "detect_systemd",
 ]
