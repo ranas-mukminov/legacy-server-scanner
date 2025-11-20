@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lamp-web
+  labels:
+    app: lamp-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lamp-web
+  template:
+    metadata:
+      labels:
+        app: lamp-web
+    spec:
+      containers:
+        - name: lamp-web
+          image: httpd:alpine
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi

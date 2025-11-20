@@ -1,0 +1,26 @@
+components:
+  - name: web
+    component_type: web
+    ports: [80]
+    volumes: [/var/www/html]
+    environment: {}
+    depends_on: [db]
+    notes:
+      - nginx/apache detected
+  - name: db
+    component_type: database
+    ports: [3306]
+    volumes: [/var/lib/mysql]
+    environment: {}
+    depends_on: []
+    notes:
+      - mysql storage
+relations:
+  - source: web
+    target: db
+    description: web connects to db
+packages: []
+services: []
+ports: []
+cron: []
+configs: []

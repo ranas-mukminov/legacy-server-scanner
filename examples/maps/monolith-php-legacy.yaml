@@ -1,0 +1,19 @@
+components:
+  - name: web
+    component_type: web
+    ports: [8080]
+    volumes: [/srv/app]
+    environment: {}
+    depends_on: []
+    notes:
+      - php-fpm behind apache
+relations: []
+packages: []
+services: []
+ports: []
+cron:
+  - schedule: "*/5 * * * *"
+    command: php /srv/app/artisan schedule:run
+    user: www-data
+    source: crontab
+configs: []

@@ -1,0 +1,1 @@
+"""Legacy server scanner package."""

@@ -1,0 +1,55 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "legacy-migration-assistant"
+version = "0.1.0"
+description = "CLI assistant to scan legacy servers and draft Docker/K8s blueprints"
+readme = "README.md"
+authors = [{name = "run-as-daemon", email = "support@run-as-daemon.ru"}]
+license = {file = "LICENSE"}
+requires-python = ">=3.10"
+keywords = ["devops", "migration", "docker", "kubernetes", "security", "audit"]
+classifiers = [
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Operating System :: POSIX :: Linux",
+  "Intended Audience :: System Administrators",
+]
+dependencies = [
+  "PyYAML>=6.0",
+  "pydantic>=2.3",
+  "typing-extensions>=4.7",
+]
+
+[project.scripts]
+legacy-scan = "legacy_migration_assistant.legacy_server_scanner.cli:main"
+legacy-k8s = "legacy_migration_assistant.legacy_to_k8s_blueprints.cli:main"
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.4",
+  "ruff>=0.1.4",
+  "mypy>=1.6",
+  "bandit>=1.7",
+  "pip-audit>=2.6",
+  "yamllint>=1.32",
+  "pykwalify>=1.8",
+]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+select = ["E", "F", "W", "I", "B", "C4", "S", "RUF"]
+ignore = ["E203", "E501"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = false
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-q"
