@@ -27,6 +27,7 @@ dependencies = [
 [project.scripts]
 legacy-scan = "legacy_migration_assistant.legacy_server_scanner.cli:main"
 legacy-k8s = "legacy_migration_assistant.legacy_to_k8s_blueprints.cli:main"
+router-policy = "router_policy_to_config.cli:main"
 
 [project.optional-dependencies]
 dev = [

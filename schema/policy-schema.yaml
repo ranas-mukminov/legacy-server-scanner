@@ -1,0 +1,372 @@
+# JSON Schema for router-policy-to-config YAML policies
+# This schema defines the structure and validation rules for network policies
+
+$schema: "http://json-schema.org/draft-07/schema#"
+$id: "https://run-as-daemon.ru/schemas/router-policy-v1.yaml"
+title: "Router Policy Schema"
+description: "Vendor-agnostic network policy for routers"
+type: object
+
+required:
+  - meta
+  - wan
+
+properties:
+  meta:
+    type: object
+    required:
+      - name
+      - target
+    properties:
+      name:
+        type: string
+        description: "Policy name (alphanumeric, dashes, underscores)"
+        pattern: "^[a-zA-Z0-9_-]+$"
+        minLength: 1
+        maxLength: 64
+      description:
+        type: string
+        description: "Human-readable description of the policy"
+        maxLength: 512
+      target:
+        type: object
+        required:
+          - vendor
+        properties:
+          vendor:
+            type: string
+            enum: ["routeros", "openwrt"]
+            description: "Target router vendor"
+          version:
+            type: string
+            description: "Target vendor version (e.g., v6, v7 for RouterOS)"
+            pattern: "^v?[0-9]+(\.[0-9]+)?$"
+
+  wan:
+    type: object
+    required:
+      - type
+      - interface
+    properties:
+      type:
+        type: string
+        enum: ["pppoe", "dhcp", "static"]
+        description: "WAN connection type"
+      interface:
+        type: string
+        description: "Physical interface for WAN (e.g., ether1, eth0)"
+        pattern: "^[a-zA-Z0-9._-]+$"
+      username:
+        type: string
+        description: "PPPoE username (required for pppoe type)"
+      password_ref:
+        type: string
+        description: "Reference to secret for password (e.g., secret:pppoe_password)"
+        pattern: "^secret:[a-zA-Z0-9_-]+$"
+      ip_address:
+        type: string
+        description: "Static IP address (required for static type)"
+        pattern: "^([0-9]{1,3}\\.){3}[0-9]{1,3}$"
+      netmask:
+        type: string
+        description: "Netmask for static IP (e.g., 255.255.255.0)"
+        pattern: "^([0-9]{1,3}\\.){3}[0-9]{1,3}$"
+      gateway:
+        type: string
+        description: "Gateway for static WAN"
+        pattern: "^([0-9]{1,3}\\.){3}[0-9]{1,3}$"
+      dns:
+        type: array
+        description: "DNS servers"
+        items:
+          type: string
+          pattern: "^([0-9]{1,3}\\.){3}[0-9]{1,3}$"
+        maxItems: 4
+      mtu:
+        type: integer
+        description: "MTU size"
+        minimum: 576
+        maximum: 9000
+
+  lans:
+    type: array
+    description: "LAN networks"
+    minItems: 1
+    items:
+      type: object
+      required:
+        - name
+        - subnet
+        - gateway
+      properties:
+        name:
+          type: string
+          description: "LAN name (alphanumeric, dashes, underscores)"
+          pattern: "^[a-zA-Z0-9_-]+$"
+          minLength: 1
+          maxLength: 32
+        subnet:
+          type: string
+          description: "LAN subnet in CIDR notation"
+          pattern: "^([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}$"
+        gateway:
+          type: string
+          description: "Gateway IP address"
+          pattern: "^([0-9]{1,3}\\.){3}[0-9]{1,3}$"
+        vlan_id:
+          type: integer
+          description: "VLAN ID (optional)"
+          minimum: 1
+          maximum: 4094
+        dhcp:
+          type: object
+          properties:
+            enabled:
+              type: boolean
+              description: "Enable DHCP server"
+            range:
+              type: string
+              description: "DHCP range (e.g., 192.168.10.100-192.168.10.200)"
+              pattern: "^([0-9]{1,3}\\.){3}[0-9]{1,3}-([0-9]{1,3}\\.){3}[0-9]{1,3}$"
+            lease_time:
+              type: string
+              description: "DHCP lease time (e.g., 24h, 1d)"
+              pattern: "^[0-9]+[hdms]$"
+            dns:
+              type: array
+              description: "DNS servers for DHCP clients"
+              items:
+                type: string
+                pattern: "^([0-9]{1,3}\\.){3}[0-9]{1,3}$"
+        isolated_from:
+          type: array
+          description: "List of LAN names this network should be isolated from"
+          items:
+            type: string
+
+  wifi:
+    type: array
+    description: "Wi-Fi networks"
+    items:
+      type: object
+      required:
+        - name
+        - lan
+        - ssid
+        - mode
+        - security
+      properties:
+        name:
+          type: string
+          description: "Wi-Fi network name"
+          pattern: "^[a-zA-Z0-9_-]+$"
+        lan:
+          type: string
+          description: "Associated LAN name"
+        ssid:
+          type: string
+          description: "Wi-Fi SSID"
+          minLength: 1
+          maxLength: 32
+        mode:
+          type: string
+          enum: ["ap", "station"]
+          description: "Wi-Fi mode (access point or station)"
+        band:
+          type: string
+          enum: ["2.4GHz", "5GHz", "6GHz"]
+          description: "Wi-Fi frequency band"
+        channel:
+          type: integer
+          description: "Wi-Fi channel number"
+          minimum: 1
+          maximum: 165
+        security:
+          type: object
+          required:
+            - encryption
+          properties:
+            encryption:
+              type: string
+              enum: ["open", "wep", "wpa-psk", "wpa2-psk", "wpa3-sae", "wpa2-enterprise"]
+              description: "Wi-Fi encryption type"
+            password_ref:
+              type: string
+              description: "Reference to secret for Wi-Fi password"
+              pattern: "^secret:[a-zA-Z0-9_-]+$"
+        guest:
+          type: boolean
+          description: "Mark as guest network (isolate from other networks)"
+        hidden:
+          type: boolean
+          description: "Hide SSID"
+
+  vpn:
+    type: array
+    description: "VPN configurations"
+    items:
+      type: object
+      required:
+        - type
+        - role
+      properties:
+        type:
+          type: string
+          enum: ["wireguard", "openvpn", "l2tp", "ipsec", "pptp"]
+          description: "VPN type"
+        role:
+          type: string
+          enum: ["server", "client"]
+          description: "VPN role (server or client)"
+        listen_port:
+          type: integer
+          description: "Listen port for VPN server"
+          minimum: 1
+          maximum: 65535
+        remote_host:
+          type: string
+          description: "Remote host for VPN client"
+        remote_port:
+          type: integer
+          description: "Remote port for VPN client"
+          minimum: 1
+          maximum: 65535
+        allowed_ips:
+          type: array
+          description: "Allowed IP ranges for VPN"
+          items:
+            type: string
+            pattern: "^([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}$"
+        public_key_ref:
+          type: string
+          description: "Reference to public key secret"
+          pattern: "^secret:[a-zA-Z0-9_-]+$"
+        private_key_ref:
+          type: string
+          description: "Reference to private key secret"
+          pattern: "^secret:[a-zA-Z0-9_-]+$"
+        preshared_key_ref:
+          type: string
+          description: "Reference to pre-shared key secret"
+          pattern: "^secret:[a-zA-Z0-9_-]+$"
+
+  firewall:
+    type: object
+    description: "Firewall configuration"
+    properties:
+      default_policy:
+        type: string
+        enum: ["accept", "drop", "reject"]
+        description: "Default firewall policy"
+        default: "drop"
+      rules:
+        type: array
+        description: "Firewall rules"
+        items:
+          type: object
+          required:
+            - name
+            - action
+          properties:
+            name:
+              type: string
+              description: "Rule name"
+              pattern: "^[a-zA-Z0-9_-]+$"
+            from:
+              type: array
+              description: "Source zones (lan names, 'wan', 'vpn', or IP/CIDR)"
+              items:
+                type: string
+            to:
+              type: array
+              description: "Destination zones (lan names, 'wan', 'vpn', or IP/CIDR)"
+              items:
+                type: string
+            protocol:
+              type: string
+              enum: ["tcp", "udp", "icmp", "all"]
+              description: "Protocol"
+            port:
+              oneOf:
+                - type: integer
+                  minimum: 1
+                  maximum: 65535
+                - type: string
+                  pattern: "^[0-9]+(-[0-9]+)?(,[0-9]+(-[0-9]+)?)*$"
+              description: "Port or port range (e.g., 80, 80-443, 80,443)"
+            action:
+              type: string
+              enum: ["accept", "drop", "reject"]
+              description: "Action to take"
+            comment:
+              type: string
+              description: "Rule comment"
+              maxLength: 256
+
+  nat:
+    type: object
+    description: "NAT configuration"
+    properties:
+      masquerade:
+        type: boolean
+        description: "Enable masquerade NAT for WAN"
+        default: true
+      port_forwards:
+        type: array
+        description: "Port forwarding rules"
+        items:
+          type: object
+          required:
+            - name
+            - external_port
+            - internal_ip
+            - internal_port
+          properties:
+            name:
+              type: string
+              description: "Port forward name"
+            protocol:
+              type: string
+              enum: ["tcp", "udp", "both"]
+              default: "tcp"
+            external_port:
+              type: integer
+              minimum: 1
+              maximum: 65535
+            internal_ip:
+              type: string
+              pattern: "^([0-9]{1,3}\\.){3}[0-9]{1,3}$"
+            internal_port:
+              type: integer
+              minimum: 1
+              maximum: 65535
+
+  dns:
+    type: object
+    description: "DNS configuration"
+    properties:
+      forwarders:
+        type: array
+        description: "DNS forwarders"
+        items:
+          type: string
+          pattern: "^([0-9]{1,3}\\.){3}[0-9]{1,3}$"
+      local_domain:
+        type: string
+        description: "Local domain name"
+        pattern: "^[a-zA-Z0-9.-]+$"
+      static_records:
+        type: array
+        description: "Static DNS records"
+        items:
+          type: object
+          required:
+            - name
+            - ip
+          properties:
+            name:
+              type: string
+              description: "Hostname"
+            ip:
+              type: string
+              pattern: "^([0-9]{1,3}\\.){3}[0-9]{1,3}$"
