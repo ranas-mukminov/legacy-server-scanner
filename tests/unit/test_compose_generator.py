@@ -1,4 +1,4 @@
-from legacy_migration_assistant.core.models import AppTopology, AppComponent, ComponentType
+from legacy_migration_assistant.core.models import AppComponent, AppTopology, ComponentType
 from legacy_migration_assistant.legacy_server_scanner.compose_generator import build_compose
 
 

@@ -6,7 +6,7 @@ import json
 from typing import Dict, List
 
 from legacy_migration_assistant.ai.base import AIProvider
-from legacy_migration_assistant.core.models import Service, Port
+from legacy_migration_assistant.core.models import Port, Service
 
 
 def suggest_classification(provider: AIProvider, services: List[Service], ports: List[Port]) -> Dict[str, str]:

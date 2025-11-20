@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import List
 
 from legacy_migration_assistant.ai.base import AIProvider, NoopAIProvider
-from legacy_migration_assistant.core.models import AppComponent, AppTopology
+from legacy_migration_assistant.core.models import AppTopology
 
 
 def generate_compose_comments(topology: AppTopology, provider: AIProvider | None = None) -> List[str]:

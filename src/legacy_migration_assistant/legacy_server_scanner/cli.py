@@ -14,12 +14,12 @@ from legacy_migration_assistant.core.models import (
     AppComponent,
     AppTopology,
     ComponentType,
+    ConfigFile,
     CronJob,
     Package,
     Port,
     Relation,
     Service,
-    ConfigFile,
 )
 from legacy_migration_assistant.legacy_server_scanner import compose_generator, exporter
 from legacy_migration_assistant.legacy_server_scanner.configs import discover_configs

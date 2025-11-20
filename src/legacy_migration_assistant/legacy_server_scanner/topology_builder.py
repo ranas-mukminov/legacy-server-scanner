@@ -8,12 +8,12 @@ from legacy_migration_assistant.core.models import (
     AppComponent,
     AppTopology,
     ComponentType,
+    ConfigFile,
     CronJob,
     Package,
     Port,
     Relation,
     Service,
-    ConfigFile,
 )
 from legacy_migration_assistant.legacy_server_scanner.classifier import classify_components
 

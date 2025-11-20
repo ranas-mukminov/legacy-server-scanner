@@ -1,6 +1,9 @@
 from legacy_migration_assistant.core.models import ComponentType
 from legacy_migration_assistant.legacy_to_k8s_blueprints.blueprint_models import BlueprintService
-from legacy_migration_assistant.legacy_to_k8s_blueprints.k8s_generator import build_deployment, build_service
+from legacy_migration_assistant.legacy_to_k8s_blueprints.k8s_generator import (
+    build_deployment,
+    build_service,
+)
 
 
 def test_deployment_contains_resources_and_probes():

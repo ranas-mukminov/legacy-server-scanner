@@ -6,10 +6,10 @@ from typing import Dict, List, Optional
 
 import yaml
 
-from legacy_migration_assistant.legacy_to_k8s_blueprints.blueprint_models import BlueprintService
 from legacy_migration_assistant.legacy_to_k8s_blueprints import security_policies
-from legacy_migration_assistant.legacy_to_k8s_blueprints.resources_advisor import suggest_resources
+from legacy_migration_assistant.legacy_to_k8s_blueprints.blueprint_models import BlueprintService
 from legacy_migration_assistant.legacy_to_k8s_blueprints.probes_advisor import suggest_probes
+from legacy_migration_assistant.legacy_to_k8s_blueprints.resources_advisor import suggest_resources
 
 
 def _container_name(service: BlueprintService) -> str:

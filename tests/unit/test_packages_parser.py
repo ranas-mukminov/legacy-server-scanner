@@ -1,4 +1,7 @@
-from legacy_migration_assistant.legacy_server_scanner.packages import parse_dpkg_output, parse_rpm_output
+from legacy_migration_assistant.legacy_server_scanner.packages import (
+    parse_dpkg_output,
+    parse_rpm_output,
+)
 
 DPKG_SAMPLE = """
 Desired=Unknown/Install/Remove/Purge/Hold

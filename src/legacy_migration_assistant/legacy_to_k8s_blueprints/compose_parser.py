@@ -26,7 +26,7 @@ def _extract_ports(port_entries: List[object]) -> List[int]:
                 ports.append(int(text))
             except ValueError:
                 continue
-    return list(sorted({p for p in ports if p > 0}))
+    return sorted({p for p in ports if p > 0})
 
 
 def parse_compose_dict(data: Dict[str, object]) -> List[BlueprintService]:

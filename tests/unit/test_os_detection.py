@@ -1,7 +1,10 @@
 import textwrap
 
-from legacy_migration_assistant.legacy_server_scanner.os_detection import detect_os_family, detect_os_release
 from legacy_migration_assistant.core.models import OSFamily
+from legacy_migration_assistant.legacy_server_scanner.os_detection import (
+    detect_os_family,
+    detect_os_release,
+)
 
 
 def test_detect_os_family_debian():
